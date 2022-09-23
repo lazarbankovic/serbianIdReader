@@ -1,11 +1,9 @@
 extern crate printpdf;
 use printpdf::*;
-
 use std::convert::From;
 use std::fs::File;
 use std::io::{BufWriter, Write};
-use crate::idreader::PersonalId;
-
+use crate::idreader::reader::*;
 
 fn add_line(x: f64, y: f64, current_layer: &PdfLayerReference) {
     let points1 = vec![
@@ -28,6 +26,7 @@ fn add_line(x: f64, y: f64, current_layer: &PdfLayerReference) {
     current_layer.add_shape(line1);
 
 }
+
 fn add_image(x: f64, y: f64, buffer: &[u8], current_layer: &PdfLayerReference) -> Result<(), String> {
     let points1 = vec![
         (Point::new(Mm(x + 0.0), Mm(259.0)), false),
@@ -110,80 +109,28 @@ pub fn topdf(personal_id: &PersonalId, path: &str) -> Result<(), String>{
         Err(str) => return Err(str.to_string())
     };
 
-    let empty: String= "".to_string();
 
-    let surname = match personal_id.personal.get(&crate::idreader::PersonalIdTag::Surname) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let name = match personal_id.personal.get(&crate::idreader::PersonalIdTag::GivenName) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let birthdate = match personal_id.personal.get(&crate::idreader::PersonalIdTag::DateOfBirth) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let place_of_birth = match personal_id.personal.get(&crate::idreader::PersonalIdTag::PlaceOfBirth) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let state_of_birth = match personal_id.personal.get(&crate::idreader::PersonalIdTag::StateOfBirth) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let community_of_birth = match personal_id.personal.get(&crate::idreader::PersonalIdTag::CommunityOfBirth) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let parent = match personal_id.personal.get(&crate::idreader::PersonalIdTag::ParentGivenName) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let state = match personal_id.personal.get(&crate::idreader::PersonalIdTag::State) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let community = match personal_id.personal.get(&crate::idreader::PersonalIdTag::Community) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let address = match personal_id.personal.get(&crate::idreader::PersonalIdTag::Street) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let house_number = match personal_id.personal.get(&crate::idreader::PersonalIdTag::HouseNumber) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let place = match personal_id.personal.get(&crate::idreader::PersonalIdTag::Place) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let personal_number = match personal_id.personal.get(&crate::idreader::PersonalIdTag::PersonalNumber) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let gender = match personal_id.personal.get(&crate::idreader::PersonalIdTag::Sex) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let authority = match personal_id.personal.get(&crate::idreader::PersonalIdTag::IssuingAuthority) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let id_no = match personal_id.personal.get(&crate::idreader::PersonalIdTag::DocRegNo) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let issuing_date = match personal_id.personal.get(&crate::idreader::PersonalIdTag::IssuingDate) {
-        Some(val) => &val.value,
-        None => &empty
-    };
-    let expiry_date = match personal_id.personal.get(&crate::idreader::PersonalIdTag::ExpiryDate) {
-        Some(val) => &val.value,
-        None => &empty
-    };
+    let empty_item = PersonalIdItem::default();
+
+    let surname = &personal_id.personal.get(&PersonalIdTag::Surname).unwrap_or(&empty_item).value;
+    let name = &personal_id.personal.get(&PersonalIdTag::GivenName).unwrap_or(&empty_item).value;
+    let birthdate = &personal_id.personal.get(&PersonalIdTag::DateOfBirth).unwrap_or(&empty_item).value;
+    let place_of_birth = &personal_id.personal.get(&PersonalIdTag::PlaceOfBirth).unwrap_or(&empty_item).value;
+    let state_of_birth = &personal_id.personal.get(&PersonalIdTag::StateOfBirth).unwrap_or(&empty_item).value;
+    let community_of_birth = &personal_id.personal.get(&PersonalIdTag::CommunityOfBirth).unwrap_or(&empty_item).value;
+    let parent = &personal_id.personal.get(&PersonalIdTag::ParentGivenName).unwrap_or(&empty_item).value;
+    let state = &personal_id.personal.get(&PersonalIdTag::State).unwrap_or(&empty_item).value;
+    let community = &personal_id.personal.get(&PersonalIdTag::Community).unwrap_or(&empty_item).value;
+    let address = &personal_id.personal.get(&PersonalIdTag::Street).unwrap_or(&empty_item).value;
+    let house_number = &personal_id.personal.get(&PersonalIdTag::HouseNumber).unwrap_or(&empty_item).value;
+    let place = &personal_id.personal.get(&PersonalIdTag::Place).unwrap_or(&empty_item).value;
+    let personal_number = &personal_id.personal.get(&PersonalIdTag::PersonalNumber).unwrap_or(&empty_item).value;
+    let gender = &personal_id.personal.get(&PersonalIdTag::Sex).unwrap_or(&empty_item).value;
+    let authority = &personal_id.personal.get(&PersonalIdTag::IssuingAuthority).unwrap_or(&empty_item).value;
+    let id_no = &personal_id.personal.get(&PersonalIdTag::DocRegNo).unwrap_or(&empty_item).value;
+    let issuing_date = &personal_id.personal.get(&PersonalIdTag::IssuingDate).unwrap_or(&empty_item).value;
+    let expiry_date = &personal_id.personal.get(&PersonalIdTag::ExpiryDate).unwrap_or(&empty_item).value;
+
     add_line(left_margin, 277.0, &current_layer);
     add_text(left_margin+2.0, 269.0, "ЧИТАЧ ЕЛЕКТРОНСКЕ ЛИЧНЕ КАРТЕ: ШТАМПА ПОДАТАКА", 15.5, &font2, &current_layer);
     add_line(left_margin, 265.0, &current_layer);

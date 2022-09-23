@@ -1,4 +1,5 @@
 use std::fs;
+use idreader::reader::{PersonalId, PersonalIdTag};
 use pcsc::*;
 mod idreader;
 use viuer::Config;
@@ -67,7 +68,7 @@ fn main() {
         }
     };
 
-    let mut personal_id = idreader::PersonalId::new(&card).unwrap();
+    let mut personal_id = PersonalId::new(&card).unwrap();
     personal_id.read_id(&card).unwrap();
 
 
@@ -83,7 +84,7 @@ fn main() {
 
     if let Some(path) = args.to_json {
         if !path.is_empty() {
-            if let Some(personal_number) = personal_id.personal.get(&crate::idreader::PersonalIdTag::PersonalNumber) {
+            if let Some(personal_number) = personal_id.personal.get(&PersonalIdTag::PersonalNumber) {
                 fs::write(&[path, personal_number.value.clone(), ".json".to_string()].concat(), personal_id.to_json()).expect("Unable to write file");
             }
         }
