@@ -87,18 +87,21 @@ fn add_text(x:f64, y:f64, text: &str, font_size: f64, font: &IndirectFontRef, cu
     current_layer.end_text_section();
 }
 
+pub fn copy_font() {
+    let font_bytes = include_bytes!("FreeSans.ttf");
+    if !std::path::Path::new("/tmp/FreeSans.ttf").exists() {
+        let mut file = File::create("/tmp/FreeSans.ttf").expect("failed to open file");
+        file.write_all(font_bytes).expect("Failed to write the file");
+    }
+
+}
+
 pub fn topdf(personal_id: &PersonalId, path: &str) -> Result<(), String>{
     let (doc, page1, layer1) =
         PdfDocument::new("Podaci licne karte", Mm(210.0), Mm(297.0), "Layer 1");
     let current_layer = doc.get_page(page1).get_layer(layer1);
     let left_margin = 18.0;
     let data_margin = 49.0;
-
-    let font_bytes = include_bytes!("FreeSans.ttf");
-    if !std::path::Path::new("/tmp/FreeSans.ttf").exists() {
-        let mut file = File::create("/tmp/FreeSans.ttf").expect("failed to open file");
-        file.write_all(font_bytes).expect("Failed to write the file");
-    }
 
     let font_file = match File::open("/tmp/FreeSans.ttf") {
         Ok(file) => file,

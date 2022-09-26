@@ -1,3 +1,4 @@
+use byteorder::{LittleEndian, ReadBytesExt};
 use std::{collections::HashMap, fmt};
 use pcsc::*;
 use super::{gemalto_card_reader::*, apollo_card_reader::*};
@@ -115,8 +116,7 @@ pub struct PersonalId {
 }
 
 pub trait CardReader {
-    fn select_aid(&self, card: &Card, aid: &[u8]) -> Result<Vec<u8>, String>;
-    fn parse_tlv(&self, buffer: &Vec<u8>) -> Result<HashMap<u16, Vec<u8>>, String>;
+    fn select_aid(&self, card: &Card) -> Result<Vec<u8>, String>;
     fn select_file(&self, card: &Card, file: &[u8], expected_result_size: u8) -> Result<Vec<u8>, String>;
     fn read_binary(&self, card: &Card, offset: u32, length: u32) -> Result<Vec<u8>, String>;
     fn read_raw_file(&self, card: &Card, file: &[u8], strip_tag: bool) -> Result<Vec<u8>, String>;
@@ -139,19 +139,48 @@ impl PersonalId {
         }
     }
 
+    fn parse_tlv(buffer: &Vec<u8>) -> Result<HashMap<u16, Vec<u8>>, String> {
+        let mut tlvs = HashMap::new();
+        let mut offset = 0;
+    
+        loop {
+            let tag = match (&buffer[offset..]).read_u16::<LittleEndian>(){
+                Ok(res) => res,
+                Err(err) => {
+                    return Err(err.to_string());
+                }
+            };
+            let length = match (&buffer[offset + 2..]).read_u16::<LittleEndian>() {
+                Ok(res) => res,
+                Err(err) => {
+                    return Err(err.to_string());
+                }
+            } as usize;
+            offset += 4;
+            let end = offset + length;
+            tlvs.insert(tag, buffer[offset..end].to_vec());
+            offset = end;
+    
+            if offset >= buffer.len() {
+                break;
+            }
+        }
+        Ok(tlvs)
+    }
+
     pub fn read_id(&mut self, card: &Card) -> Result<(),String> {
-        self.card_reader.select_aid(card, LICNA_KARTA_AID)?;
+        self.card_reader.select_aid(card)?;
 
         let buffer = self.card_reader.read_raw_file(&card, PERSONAL_FILE, false)?;
-        let res = self.card_reader.parse_tlv(&buffer)?;
+        let res = Self::parse_tlv(&buffer)?;
         self.fit_in(&res);
 
         let buffer = self.card_reader.read_raw_file(&card, RESIDENCE_FILE, false)?;
-        let res = self.card_reader.parse_tlv(&buffer)?;
+        let res = Self::parse_tlv(&buffer)?;
         self.fit_in(&res);
 
         let buffer = self.card_reader.read_raw_file(&card, DOCUMENT_FILE, false)?;
-        let res = self.card_reader.parse_tlv(&buffer) ?;
+        let res = Self::parse_tlv(&buffer) ?;
         self.fit_in(&res);
         
         self.image = self.card_reader.read_raw_file(&card, PHOTO_FILE, true)?;

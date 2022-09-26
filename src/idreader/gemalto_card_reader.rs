@@ -1,6 +1,4 @@
-use byteorder::{LittleEndian, ReadBytesExt};
 use pcsc::*;
-use std::collections::HashMap;
 use super::reader::*;
 
 pub const GEMALTO_CARD_TYPE: &'static [u8] = &[
@@ -10,14 +8,13 @@ pub const GEMALTO_CARD_TYPE: &'static [u8] = &[
 
 pub const LICNA_KARTA_AID: &[u8] = &[0xF3, 0x81, 0x00, 0x00, 0x02, 0x53, 0x45, 0x52, 0x49, 0x44, 0x01];
 
-
 pub struct GemaltoCardReader {
 }
 
 impl CardReader for GemaltoCardReader  {
-    fn select_aid(&self, card: &Card, aid: &[u8]) -> Result<Vec<u8>, String> {
-        let apdu: &[u8] = &[0x00, 0xa4, 0x04, 0x00, aid.len() as u8];
-         let apdu = [apdu, aid].concat();
+    fn select_aid(&self, card: &Card) -> Result<Vec<u8>, String> {
+        let apdu: &[u8] = &[0x00, 0xa4, 0x04, 0x00, LICNA_KARTA_AID.len() as u8];
+         let apdu = [apdu, LICNA_KARTA_AID].concat();
 
         let mut rapdu_buf = [0; MAX_BUFFER_SIZE];
         let rapdu = match card.transmit(&apdu, &mut rapdu_buf) {
@@ -33,34 +30,6 @@ impl CardReader for GemaltoCardReader  {
             return Err(format!("Reader returned error code {:x?}", result));
         }
         Ok(data.to_vec())
-    }
-    fn parse_tlv(&self, buffer: &Vec<u8>) -> Result<HashMap<u16, Vec<u8>>, String> {
-        let mut tlvs = HashMap::new();
-        let mut offset = 0;
-    
-        loop {
-            let tag = match (&buffer[offset..]).read_u16::<LittleEndian>(){
-                Ok(res) => res,
-                Err(err) => {
-                    return Err(err.to_string());
-                }
-            };
-            let length = match (&buffer[offset + 2..]).read_u16::<LittleEndian>() {
-                Ok(res) => res,
-                Err(err) => {
-                    return Err(err.to_string());
-                }
-            } as usize;
-            offset += 4;
-            let end = offset + length;
-            tlvs.insert(tag, buffer[offset..end].to_vec());
-            offset = end;
-    
-            if offset >= buffer.len() {
-                break;
-            }
-        }
-        Ok(tlvs)
     }
     
     fn select_file(&self, card: &Card, file: &[u8], expected_result_size: u8) -> Result<Vec<u8>, String> {

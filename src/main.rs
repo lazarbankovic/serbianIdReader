@@ -96,6 +96,7 @@ fn main() {
 
     if let Some(path) = args.to_pdf {
         if !path.is_empty() {
+            pdf::copy_font();
             pdf::topdf(&personal_id, &path).unwrap();            
         }
     }

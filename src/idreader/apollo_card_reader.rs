@@ -1,5 +1,3 @@
-use byteorder::{LittleEndian, ReadBytesExt};
-use std::collections::HashMap;
 use pcsc::*;
 
 use super::reader::*;
@@ -9,42 +7,13 @@ pub const APOLLO_CARD_TYPE: &'static [u8] = &[
     0x0, 0xdf,
 ];
 
-
 pub struct ApolloCardReader {
 }
 
 impl CardReader for ApolloCardReader {
-    fn select_aid(&self, _card: &Card, _aid: &[u8]) -> Result<Vec<u8>, String> {
+    fn select_aid(&self, _card: &Card) -> Result<Vec<u8>, String> {
+        // Already preselected AID on this card
         Ok(vec![])
-    }
-
-    fn parse_tlv(&self, buffer: &Vec<u8>) -> Result<HashMap<u16, Vec<u8>>, String> {
-        let mut tlvs = HashMap::new();
-        let mut offset = 0;
-    
-        loop {
-            let tag = match (&buffer[offset..]).read_u16::<LittleEndian>(){
-                Ok(res) => res,
-                Err(err) => {
-                    return Err(err.to_string());
-                }
-            };
-            let length = match (&buffer[offset + 2..]).read_u16::<LittleEndian>() {
-                Ok(res) => res,
-                Err(err) => {
-                    return Err(err.to_string());
-                }
-            } as usize;
-            offset += 4;
-            let end = offset + length;
-            tlvs.insert(tag, buffer[offset..end].to_vec());
-            offset = end;
-    
-            if offset >= buffer.len() {
-                break;
-            }
-        }
-        Ok(tlvs)
     }
     
     fn select_file(&self, card: &Card, file: &[u8], expected_result_size: u8) -> Result<Vec<u8>, String> {
