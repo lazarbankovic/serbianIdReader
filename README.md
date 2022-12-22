@@ -1,10 +1,12 @@
 # SerbianIdReader
 
-<img src="./primer.png" width="450" align="right">
-
 This is a simple Linux terminal application for reading data from serbian identity cards.  
-Reading is done using only pcsc, pkcs#11 is not supported.  
-[Demo on youtube](https://bit.ly/3jqs81x)
+Reading is done using only pcsc, pkcs#11 is not supported. 
+Sixel is supported, terminals supporting sixel will show hiher quality images.  
+[Demo on youtube](https://bit.ly/3jqs81x)  
+<p align="center">
+  <img src="./primer.png" width="450">
+</p>
 
 ## Building  
 ```
