@@ -130,6 +130,7 @@ impl PersonalId {
         };
         if buffer == APOLLO_CARD_TYPE { return Ok(PersonalId { personal: HashMap::new(), image: vec![], card_reader: Box::new(ApolloCardReader{})});}
         if buffer == GEMALTO_CARD_TYPE { return Ok(PersonalId { personal: HashMap::new(), image: vec![], card_reader: Box::new(GemaltoCardReader{})});}
+        if buffer == GEMALTO_NEW_CARD_TYPE { return Ok(PersonalId { personal: HashMap::new(), image: vec![], card_reader: Box::new(GemaltoCardReader{})});}
 
         return Err("Unknown card type".to_string());
     }
