@@ -3,7 +3,7 @@ use printpdf::*;
 use std::convert::From;
 use std::fs::File;
 use std::io::{BufWriter, Write};
-use crate::idreader::reader::*;
+use idreader_lib::module_reader::reader::{PersonalId, PersonalIdTag, PersonalIdItem};
 
 fn add_line(x: f64, y: f64, current_layer: &PdfLayerReference) {
     let points1 = vec![

@@ -1,0 +1,13 @@
+[package]
+name = "rsid_reader"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+pcsc = "2"
+image = { version = "0.24.7", package = "image" }
+image_crate = { version = "0.23.14", package = "image" }
+viuer = { version = "0.6"}
+clap = { version = "3.2.25", features = ["derive"] }
+idreader_lib = { path = "../idreader_lib" }
+pdfexporter_lib = { path = "../pdfexporter_lib" }

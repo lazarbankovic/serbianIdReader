@@ -1,9 +1,8 @@
 use std::fs;
-use idreader::reader::{PersonalId, PersonalIdTag};
+use idreader_lib::module_reader::reader::{PersonalId, PersonalIdTag};
 use pcsc::*;
-mod idreader;
 use viuer::Config;
-mod pdf;
+use pdfexporter_lib::exporter::pdf;
 use clap::Parser;
 
 /// Serbian IDCard reader

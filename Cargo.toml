@@ -1,16 +1,4 @@
-[package]
-name = "rsid_reader"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-pcsc = "2"
-image = { version = "0.24.0", package = "image" }
-image_crate = { version = "0.23.0", package = "image" }
-byteorder = "1.4.3"
-base64 = "0.13.0"
-viuer = { version = "0.6", features = ["sixel"] }
-printpdf = {version="0.5.2", features = ["embedded_images"]} 
-clap = { version = "3.2.5", features = ["derive"] }
+[workspace]
+members = ["rsid_reader", "idreader_lib", "pdfexporter_lib"]
 
 
