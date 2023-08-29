@@ -1,0 +1,9 @@
+[package]
+name = "idreader_lib"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+pcsc = "2"
+byteorder = "1.4.3"
+base64 = "0.13.1"
