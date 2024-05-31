@@ -13,4 +13,3 @@ viuer = { version = "0.6", features = ["sixel"] }
 printpdf = {version="0.5.2", features = ["embedded_images"]} 
 clap = { version = "3.2.5", features = ["derive"] }
 
-
