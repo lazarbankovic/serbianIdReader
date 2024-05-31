@@ -63,16 +63,16 @@ pub const ID_TAGS: &'static [PersonalIdTagType] =
           PersonalIdTagType{id: PersonalIdTag::GivenName, description: "Ime", json_id: "GivenName"},
           PersonalIdTagType{id: PersonalIdTag::ParentGivenName, description: "Ime roditelja", json_id: "ParentGivenName"},
           PersonalIdTagType{id: PersonalIdTag::Sex, description: "Pol", json_id: "Sex"},
-          PersonalIdTagType{id: PersonalIdTag::PlaceOfBirth, description: "Mesto rodjenja", json_id: "PlaceOfBirth"},
-          PersonalIdTagType{id: PersonalIdTag::CommunityOfBirth, description: "Opstina rodjenja", json_id: "CommunityOfBirth"},
-          PersonalIdTagType{id: PersonalIdTag::StateOfBirth, description: "Drzava rodjenja", json_id: "StateOfBirth"},
-          PersonalIdTagType{id: PersonalIdTag::DateOfBirth, description: "Datum rodjenja", json_id: "DateOfBirth"},
-          PersonalIdTagType{id: PersonalIdTag::State, description: "Drzava", json_id: "State"},
-          PersonalIdTagType{id: PersonalIdTag::Community, description: "Opstina", json_id: "Community"},
+          PersonalIdTagType{id: PersonalIdTag::PlaceOfBirth, description: "Mesto rođenja", json_id: "PlaceOfBirth"},
+          PersonalIdTagType{id: PersonalIdTag::CommunityOfBirth, description: "Opština rođenja", json_id: "CommunityOfBirth"},
+          PersonalIdTagType{id: PersonalIdTag::StateOfBirth, description: "Država rođenja", json_id: "StateOfBirth"},
+          PersonalIdTagType{id: PersonalIdTag::DateOfBirth, description: "Datum rođenja", json_id: "DateOfBirth"},
+          PersonalIdTagType{id: PersonalIdTag::State, description: "Država", json_id: "State"},
+          PersonalIdTagType{id: PersonalIdTag::Community, description: "Opština", json_id: "Community"},
           PersonalIdTagType{id: PersonalIdTag::Place, description: "Mesto", json_id: "Place"},
           PersonalIdTagType{id: PersonalIdTag::Street, description: "Ulica", json_id: "Street"},
-          PersonalIdTagType{id: PersonalIdTag::HouseNumber, description: "Kucni broj", json_id: "HouseNumber"},
-          PersonalIdTagType{id: PersonalIdTag::HouseLetter, description: "Kucna oznaka", json_id: "HouseLetter"},
+          PersonalIdTagType{id: PersonalIdTag::HouseNumber, description: "Kućni broj", json_id: "HouseNumber"},
+          PersonalIdTagType{id: PersonalIdTag::HouseLetter, description: "Kućna oznaka", json_id: "HouseLetter"},
           PersonalIdTagType{id: PersonalIdTag::Entrance, description: "Broj ulaza", json_id: "Entrance"},
           PersonalIdTagType{id: PersonalIdTag::Floor, description: "Sprat broj", json_id: "Floor"},
           PersonalIdTagType{id: PersonalIdTag::AppartmentNumber, description: "Broj stana", json_id: "AppartmentNumber"},
@@ -105,7 +105,7 @@ impl PersonalIdItem {
 
 impl fmt::Display for PersonalIdItem {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}: {}", self.tag.description, self.value)
+        write!(f, "{: >20}: {}", self.tag.description, self.value)
     }
 }
 

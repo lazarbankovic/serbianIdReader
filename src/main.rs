@@ -74,9 +74,9 @@ fn main() {
 
     if args.to_pdf == None && args.to_json == None && !args.to_json_stdout {
         let conf = Config { absolute_offset:false, x: 0, y: 0, width: Some(42), height: Some(28), ..Default::default()};
-        let img = image::load_from_memory(&personal_id.image).expect("Could not be read");
+        let img = image::load_from_memory(&personal_id.image).expect("Could not read image");
 
-        viuer::print(&img, &conf).expect("Image printing failed.");
+        viuer::print(&img, &conf).expect("Image printing failed");
         for (_tag, item) in personal_id.personal.iter() {
             println!("{}", item);
         }

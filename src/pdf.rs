@@ -81,7 +81,7 @@ fn add_text(x:f64, y:f64, text: &str, font_size: f64, font: &IndirectFontRef, cu
     current_layer.set_word_spacing(5.0);
     current_layer.set_character_spacing(0.3);
     current_layer.set_text_rendering_mode(TextRenderingMode::Fill);
-    current_layer.write_text(text.clone(), &font);
+    current_layer.write_text(text, &font);
     current_layer.add_line_break();
 
     current_layer.end_text_section();
