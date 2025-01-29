@@ -132,6 +132,7 @@ impl PersonalId {
         if buffer == GEMALTO_CARD_TYPE { return Ok(PersonalId { personal: HashMap::new(), image: vec![], card_reader: Box::new(GemaltoCardReader{})});}
         if buffer == GEMALTO_NEW_CARD_TYPE { return Ok(PersonalId { personal: HashMap::new(), image: vec![], card_reader: Box::new(GemaltoCardReader{})});}
         if buffer == GEMALTO_EVEN_NEWER_CARD_TYPE { return Ok(PersonalId { personal: HashMap::new(), image: vec![], card_reader: Box::new(GemaltoCardReader{})});}
+        if buffer == GEMALTO_CARD_TYPE_1 { return Ok(PersonalId { personal: HashMap::new(), image: vec![], card_reader: Box::new(GemaltoCardReader{})});}
         return Err("Unknown card type".to_string());
     }
     fn fit_in(&mut self, map: &HashMap<u16, Vec<u8>>) {
